@@ -1,3 +1,982 @@
-<html>
-  <h3>Hello word</h3>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>7 Habits - Stephen Covey</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    :root {
+      --fs-base: 15px;           /* dasar mobile */
+      --fs-scale: 1;            /* faktor tambahan kalau perlu */
+    }
+    @media (min-width: 640px) {  /* >= sm (mobile besar/tablet potret) */
+      :root { --fs-base: 16px; }
+    }
+    @media (min-width: 768px) {  /* >= md (tablet lanskap) */
+      :root { --fs-base: 16.25px; }
+    }
+    @media (min-width: 1024px) { /* >= lg (laptop) */
+      :root { --fs-base: 17px; }
+    }
+
+    html { font-size: calc(var(--fs-base) * var(--fs-scale)); }
+    body { font-family: 'Inter', sans-serif; }
+
+    /* util background & shadow */
+    .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    .card-shadow { box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
+
+    /* Transisi antar halaman */
+    .page { display: none; opacity: 0; transform: translateX(24px); transition: opacity .35s ease, transform .35s ease; }
+    .page.active { display: block; opacity: 1; transform: translateX(0); }
+    @media (prefers-reduced-motion: reduce) {
+      .page { transition: none; transform: none; }
+    }
+
+    .nav-btn { transition: transform .2s ease, box-shadow .2s ease; cursor: pointer; }
+    .nav-btn:active { transform: translateY(1px) scale(.98); }
+
+    /* efek halus */
+    .progress-indicator, .habit-icon { transition: all .25s ease; }
+    .habit-icon:hover { transform: scale(1.06); }
+
+    /* animasi dekoratif */
+    .floating { animation: floating 3s ease-in-out infinite; }
+    @keyframes floating { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+    @media (prefers-reduced-motion: reduce) { .floating { animation: none; } }
+
+    /* Fluid typography dengan clamp() untuk judul */
+    .h1-fluid { font-weight: 800; line-height: 1.15; font-size: clamp(1.6rem, 5.5vw, 2.75rem); }
+    .h2-fluid { font-weight: 700; line-height: 1.2;  font-size: clamp(1.1rem, 4.2vw, 1.65rem); }
+    .lead     { font-size: clamp(0.95rem, 3.5vw, 1.125rem); }
+
+    /* Kartu info kecil */
+    .mini-card { padding: .875rem; }
+    @media (min-width:768px){ .mini-card { padding: 1rem; } }
+
+    /* Progress dots lebih kecil di mobile */
+    .dot-btn { width: 2rem; height: 2rem; }
+    @media (min-width:768px){ .dot-btn { width: 2.25rem; height: 2.25rem; } }
+
+    /* Ringkas header di mobile */
+    .header-pad { padding-block: .6rem; }
+    @media (min-width:768px){ .header-pad { padding-block: .8rem; } }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+  <!-- Header -->
+  <header class="gradient-bg text-white sticky top-0 z-50">
+    <div class="container mx-auto px-3 sm:px-4 header-pad">
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 bg-white rounded-full flex items-center justify-center">
+            <span class="text-purple-600 font-bold text-base sm:text-lg">7</span>
+          </div>
+          <div>
+            <h1 class="text-base sm:text-lg font-bold">7 Habits Journey</h1>
+            <p class="text-[0.8rem] sm:text-sm opacity-90">Stephen R. Covey</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-[0.8rem] sm:text-sm" id="pageIndicator">1 / 9</span>
+          <div class="w-20 sm:w-24 bg-white/30 rounded-full h-2">
+            <div id="progressBar" class="bg-white h-2 rounded-full transition-all duration-300" style="width: 11.11%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page 1: Pengantar -->
+  <div class="page active" id="page-0">
+    <div class="min-h-screen flex items-center justify-center p-4">
+      <div class="max-w-3xl lg:max-w-4xl mx-auto text-center">
+        <div class="floating mb-6 sm:mb-8">
+          <div class="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full mx-auto mb-5 sm:mb-6 flex items-center justify-center">
+            <span class="text-white text-4xl sm:text-5xl">📚</span>
+          </div>
+        </div>
+
+        <h1 class="h1-fluid text-gray-800 mb-3 sm:mb-4">
+          The 7 Habits of<br>
+          <span class="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">Highly Effective People</span>
+        </h1>
+
+        <p class="lead text-gray-600 mb-6 sm:mb-7 max-w-2xl mx-auto">
+          Powerful Lessons in Personal Change oleh Stephen R. Covey
+        </p>
+
+        <div class="bg-white rounded-2xl p-5 sm:p-6 md:p-8 card-shadow mb-6 sm:mb-8 max-w-3xl mx-auto">
+          <h2 class="h2-fluid text-gray-800 mb-3 sm:mb-4 text-center">Selamat Datang di Perjalanan Transformasi</h2>
+          <p class="text-[0.95rem] leading-relaxed text-gray-700 mb-5 sm:mb-6">
+            Buku ini bukan sekadar kumpulan tips produktivitas, melainkan panduan fundamental untuk
+            mengembangkan karakter dan mencapai efektivitas sejati dalam hidup pribadi dan profesional.
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
+            <div class="text-center mini-card bg-green-50 rounded-xl">
+              <div class="text-2xl sm:text-3xl mb-1.5">🏆</div>
+              <h3 class="font-semibold text-green-800 text-sm sm:text-base">Private Victory</h3>
+              <p class="text-[0.8rem] sm:text-sm text-green-600">Kemandirian</p>
+            </div>
+            <div class="text-center mini-card bg-blue-50 rounded-xl">
+              <div class="text-2xl sm:text-3xl mb-1.5">🤝</div>
+              <h3 class="font-semibold text-blue-800 text-sm sm:text-base">Public Victory</h3>
+              <p class="text-[0.8rem] sm:text-sm text-blue-600">Interdependensi</p>
+            </div>
+            <div class="text-center mini-card bg-purple-50 rounded-xl">
+              <div class="text-2xl sm:text-3xl mb-1.5">🔄</div>
+              <h3 class="font-semibold text-purple-800 text-sm sm:text-base">Renewal</h3>
+              <p class="text-[0.8rem] sm:text-sm text-purple-600">Pembaruan Diri</p>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="nextPage()" class="nav-btn bg-gradient-to-r from-purple-600 to-blue-600 text-white px-5 py-3 md:px-7 md:py-3.5 rounded-full text-sm md:text-base font-semibold">
+          Mulai Perjalanan →
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HABIT SECTIONS -->
+  <!-- Pattern perubahan utama:
+       - Heading pakai .h1-fluid/.h2-fluid
+       - Padding jadi p-4 py-14 sm:py-16 md:py-20
+       - Grid tetap 1 kolom sampai lg (duh fix)
+       - Font-size umum diperkecil di mobile
+  -->
+
+  <!-- Habit 1 -->
+  <div class="page" id="page-1">
+    <div class="min-h-screen p-4 py-14 sm:py-16 md:py-20">
+      <div class="max-w-3xl lg:max-w-4xl mx-auto">
+        <div class="text-center mb-6 sm:mb-8">
+          <div class="w-16 h-16 sm:w-20 sm:h-20 bg-red-500 rounded-full mx-auto mb-3 flex items-center justify-center text-white text-2xl sm:text-3xl font-bold">1</div>
+          <div class="bg-green-100 rounded-lg p-2.5 sm:p-3 mb-4 inline-block">
+            <span class="text-green-800 font-semibold text-[0.85rem] sm:text-sm">🏆 Private Victory - Kemandirian</span>
+          </div>
+          <h1 class="h1-fluid text-gray-800 mb-1.5">Be Proactive</h1>
+          <h2 class="h2-fluid text-gray-600">Jadilah Proaktif</h2>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 sm:p-6 md:p-8 card-shadow mb-5 sm:mb-6">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+            <div>
+              <h3 class="text-lg md:text-xl font-bold text-gray-800 mb-3">Konsep Utama</h3>
+              <p class="text-gray-700 leading-relaxed mb-5 text-[0.98rem]">
+                Bertanggung jawab penuh atas pilihan dan tindakan Anda. Fokus pada hal-hal yang bisa
+                Anda kendalikan dan pengaruhi, bukan pada hal-hal di luar kendali Anda.
+              </p>
+
+              <div class="bg-red-50 rounded-lg p-4 sm:p-5">
+                <h4 class="font-semibold text-red-800 mb-2">🎯 Contoh Penerapan:</h4>
+                <ul class="space-y-1.5 text-red-700 text-[0.95rem]">
+                  <li class="flex gap-2"><span class="text-red-500">•</span><span>Siapkan payung/jaket saat cuaca buruk—bukan mengeluh.</span></li>
+                  <li class="flex gap-2"><span class="text-red-500">•</span><span>Fokus perbaikan diri ketika dikritik.</span></li>
+                  <li class="flex gap-2"><span class="text-red-500">•</span><span>Gunakan bahasa proaktif: “Saya akan…”.</span></li>
+                  <li class="flex gap-2"><span class="text-red-500">•</span><span>Ambil inisiatif menyelesaikan masalah.</span></li>
+                </ul>
+              </div>
+            </div>
+
+            <div>
+              <div class="bg-gray-50 rounded-lg p-4 sm:p-5 mb-5">
+                <h4 class="font-semibold text-gray-800 mb-2">Circle of Influence vs Circle of Concern</h4>
+                <div class="relative">
+                  <div class="w-40 h-40 sm:w-48 sm:h-48 bg-red-100 rounded-full mx-auto relative">
+                    <div class="w-28 h-28 sm:w-32 sm:h-32 bg-red-300 rounded-full absolute top-6 sm:top-8 left-6 sm:left-8 flex items-center justify-center">
+                      <span class="text-red-800 text-xs sm:text-sm font-semibold text-center">Circle of<br>Influence</span>
+                    </div>
+                    <span class="absolute bottom-3 left-1/2 -translate-x-1/2 text-red-700 text-xs sm:text-sm font-semibold">Circle of Concern</span>
+                  </div>
+                </div>
+                <p class="text-gray-600 text-xs sm:text-sm mt-3 text-center">
+                  Fokuskan energi pada Circle of Influence untuk memperluas kemampuan Anda.
+                </p>
+              </div>
+
+              <div class="bg-yellow-50 border-l-4 border-yellow-400 p-3.5 sm:p-4 rounded-r-lg">
+                <h4 class="font-semibold text-yellow-800 mb-1.5">💡 Kunci Sukses</h4>
+                <p class="text-yellow-700 text-[0.9rem]">
+                  "Saya tak bisa mengontrol apa yang terjadi, tapi saya bisa mengontrol respon saya."
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-between">
+          <button onclick="prevPage()" class="nav-btn bg-gray-600 text-white px-4 py-2.5 md:px-6 md:py-3 rounded-full text-sm">
+            ← Kembali
+          </button>
+          <button onclick="nextPage()" class="nav-btn bg-gradient-to-r from-red-500 to-orange-500 text-white px-4 py-2.5 md:px-6 md:py-3 rounded-full text-sm">
+            Habit 2 →
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Habit 2 -->
+  <div class="page" id="page-2">
+    <div class="min-h-screen p-4 py-14 sm:py-16 md:py-20">
+      <div class="max-w-3xl lg:max-w-4xl mx-auto">
+        <div class="text-center mb-6 sm:mb-8">
+          <div class="w-16 h-16 sm:w-20 sm:h-20 bg-orange-500 rounded-full mx-auto mb-3 flex items-center justify-center text-white text-2xl sm:text-3xl font-bold">2</div>
+          <div class="bg-green-100 rounded-lg p-2.5 sm:p-3 mb-4 inline-block">
+            <span class="text-green-800 font-semibold text-[0.85rem] sm:text-sm">🏆 Private Victory - Kemandirian</span>
+          </div>
+          <h1 class="h1-fluid text-gray-800 mb-1.5">Begin with the End in Mind</h1>
+          <h2 class="h2-fluid text-gray-600">Mulai dengan Tujuan Akhir</h2>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 sm:p-6 md:p-8 card-shadow mb-5 sm:mb-6">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+            <div>
+              <h3 class="text-lg md:text-xl font-bold text-gray-800 mb-3">Konsep Utama</h3>
+              <p class="text-gray-700 leading-relaxed mb-5 text-[0.98rem]">
+                Tentukan visi dan misi hidup dengan jelas. Setiap keputusan harian diarahkan ke tujuan akhir yang Anda tetapkan.
+              </p>
+
+              <div class="bg-orange-50 rounded-lg p-4 sm:p-5">
+                <h4 class="font-semibold text-orange-800 mb-2">🎯 Contoh Penerapan:</h4>
+                <ul class="space-y-1.5 text-orange-700 text-[0.95rem]">
+                  <li class="flex gap-2"><span class="text-orange-500">•</span><span>Tulis pernyataan misi pribadi.</span></li>
+                  <li class="flex gap-2"><span class="text-orange-500">•</span><span>Visualisasikan hasil akhir tiap proyek.</span></li>
+                  <li class="flex gap-2"><span class="text-orange-500">•</span><span>Rencana karier 5–10 tahun dengan milestone.</span></li>
+                  <li class="flex gap-2"><span class="text-orange-500">•</span><span>Tentukan nilai inti untuk memandu keputusan.</span></li>
+                </ul>
+              </div>
+            </div>
+
+            <div>
+              <div class="bg-gray-50 rounded-lg p-4 sm:p-5 mb-5">
+                <h4 class="font-semibold text-gray-800 mb-2">Mental Creation Process</h4>
+                <div class="space-y-3">
+                  <div class="flex items-center gap-3 p-3 bg-white rounded-lg">
+                    <div class="w-7 h-7 sm:w-8 sm:h-8 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold text-xs sm:text-sm">1</div>
+                    <span class="text-gray-700 text-[0.95rem]">Visualisasi dalam pikiran</span>
+                  </div>
+                  <div class="flex items-center gap-3 p-3 bg-white rounded-lg">
+                    <div class="w-7 h-7 sm:w-8 sm:h-8 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold text-xs sm:text-sm">2</div>
+                    <span class="text-gray-700 text-[0.95rem]">Realisasi dalam tindakan</span>
+                  </div>
+                </div>
+                <p class="text-gray-600 text-xs sm:text-sm mt-3">
+                  Semua hal diciptakan dua kali—pertama di pikiran, lalu di kenyataan.
+                </p>
+              </div>
+
+              <div class="bg-blue-50 border-l-4 border-blue-400 p-3.5 sm:p-4 rounded-r-lg">
+                <h4 class="font-semibold text-blue-800 mb-1.5">💡 Pertanyaan Refleksi</h4>
+                <p class="text-blue-700 text-[0.9rem] mb-1">"Bagaimana saya ingin dikenang?"</p>
+                <p class="text-blue-700 text-[0.9rem]">"Kontribusi terbesar apa yang ingin saya beri?"</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-between">
+          <button onclick="prevPage()" class="nav-btn bg-gray-600 text-white px-4 py-2.5 md:px-6 md:py-3 rounded-full text-sm">
+            ← Habit 1
+          </button>
+          <button onclick="nextPage()" class="nav-btn bg-gradient-to-r from-orange-500 to-yellow-500 text-white px-4 py-2.5 md:px-6 md:py-3 rounded-full text-sm">
+            Habit 3 →
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Habit 3 -->
+  <div class="page" id="page-3">
+    <div class="min-h-screen p-4 py-14 sm:py-16 md:py-20">
+      <div class="max-w-3xl lg:max-w-4xl mx-auto">
+        <div class="text-center mb-6 sm:mb-8">
+          <div class="w-16 h-16 sm:w-20 sm:h-20 bg-yellow-500 rounded-full mx-auto mb-3 flex items-center justify-center text-white text-2xl sm:text-3xl font-bold">3</div>
+          <div class="bg-green-100 rounded-lg p-2.5 sm:p-3 mb-4 inline-block">
+            <span class="text-green-800 font-semibold text-[0.85rem] sm:text-sm">🏆 Private Victory - Kemandirian</span>
+          </div>
+          <h1 class="h1-fluid text-gray-800 mb-1.5">Put First Things First</h1>
+          <h2 class="h2-fluid text-gray-600">Dahulukan yang Utama</h2>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 sm:p-6 md:p-8 card-shadow mb-5 sm:mb-6">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+            <div>
+              <h3 class="text-lg md:text-xl font-bold text-gray-800 mb-3">Konsep Utama</h3>
+              <p class="text-gray-700 leading-relaxed mb-5 text-[0.98rem]">
+                Kelola waktu dengan prioritas, bukan sekadar urgensi. Investasi terbesar ada di Kuadran II.
+              </p>
+
+              <div class="bg-yellow-50 rounded-lg p-4 sm:p-5">
+                <h4 class="font-semibold text-yellow-800 mb-2">🎯 Contoh Penerapan:</h4>
+                <ul class="space-y-1.5 text-yellow-700 text-[0.95rem]">
+                  <li class="flex gap-2"><span class="text-yellow-500">•</span><span>Gunakan matriks Covey.</span></li>
+                  <li class="flex gap-2"><span class="text-yellow-500">•</span><span>Blokir waktu aktivitas penting tak mendesak.</span></li>
+                  <li class="flex gap-2"><span class="text-yellow-500">•</span><span>Berkata “tidak” pada yang tidak penting.</span></li>
+                  <li class="flex gap-2"><span class="text-yellow-500">•</span><span>Plan mingguan berdasar peran & tujuan.</span></li>
+                </ul>
+              </div>
+            </div>
+
+            <div>
+              <div class="bg-gray-50 rounded-lg p-4 sm:p-5">
+                <h4 class="font-semibold text-gray-800 mb-3">Time Management Matrix</h4>
+                <div class="grid grid-cols-2 gap-2.5 sm:gap-3">
+                  <div class="bg-red-100 p-3 sm:p-4 rounded-lg text-center">
+                    <div class="font-bold text-red-800 mb-1">Kuadran I</div>
+                    <div class="text-[0.7rem] sm:text-xs text-red-700 mb-1">Penting & Mendesak</div>
+                    <div class="text-[0.7rem] sm:text-xs text-red-600">Krisis, Deadline</div>
+                  </div>
+                  <div class="bg-green-100 p-3 sm:p-4 rounded-lg text-center border-2 sm:border-4 border-green-400">
+                    <div class="font-bold text-green-800 mb-1">Kuadran II</div>
+                    <div class="text-[0.7rem] sm:text-xs text-green-700 mb-1">Penting & Tidak Mendesak</div>
+                    <div class="text-[0.7rem] sm:text-xs text-green-600">Rencana, Belajar, Olahraga</div>
+                  </div>
+                  <div class="bg-yellow-100 p-3 sm:p-4 rounded-lg text-center">
+                    <div class="font-bold text-yellow-800 mb-1">Kuadran III</div>
+                    <div class="text-[0.7rem] sm:text-xs text-yellow-700 mb-1">Tidak Penting & Mendesak</div>
+                    <div class="text-[0.7rem] sm:text-xs text-yellow-600">Interupsi, Telp</div>
+                  </div>
+                  <div class="bg-gray-100 p-3 sm:p-4 rounded-lg text-center">
+                    <div class="font-bold text-gray-800 mb-1">Kuadran IV</div>
+                    <div class="text-[0.7rem] sm:text-xs text-gray-700 mb-1">Tidak Penting & Tidak Mendesak</div>
+                    <div class="text-[0.7rem] sm:text-xs text-gray-600">Hiburan Berlebih</div>
+                  </div>
+                </div>
+                <p class="text-green-700 text-xs sm:text-sm mt-3 text-center font-semibold">
+                  Fokus pada Kuadran II untuk efektivitas maksimal.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-between">
+          <button onclick="prevPage()" class="nav-btn bg-gray-600 text-white px-4 py-2.5 md:px-6 md:py-3 rounded-full text-sm">
+            ← Habit 2
+          </button>
+          <button onclick="nextPage()" class="nav-btn bg-gradient-to-r from-yellow-500 to-green-500 text-white px-4 py-2.5 md:px-6 md:py-3 rounded-full text-sm">
+            Habit 4 →
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Habit 4 -->
+  <div class="page" id="page-4">
+    <div class="min-h-screen p-4 py-14 sm:py-16 md:py-20">
+      <div class="max-w-3xl lg:max-w-4xl mx-auto">
+        <div class="text-center mb-6 sm:mb-8">
+          <div class="w-16 h-16 sm:w-20 sm:h-20 bg-green-500 rounded-full mx-auto mb-3 flex items-center justify-center text-white text-2xl sm:text-3xl font-bold">4</div>
+          <div class="bg-blue-100 rounded-lg p-2.5 sm:p-3 mb-4 inline-block">
+            <span class="text-blue-800 font-semibold text-[0.85rem] sm:text-sm">🤝 Public Victory - Interdependensi</span>
+          </div>
+          <h1 class="h1-fluid text-gray-800 mb-1.5">Think Win-Win</h1>
+          <h2 class="h2-fluid text-gray-600">Berpikir Menang-Menang</h2>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 sm:p-6 md:p-8 card-shadow mb-5 sm:mb-6">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+            <div>
+              <h3 class="text-lg md:text-xl font-bold text-gray-800 mb-3">Konsep Utama</h3>
+              <p class="text-gray-700 leading-relaxed mb-5 text-[0.98rem]">
+                Cari solusi yang menguntungkan semua pihak. Bangun kepercayaan dan mentalitas berlimpah.
+              </p>
+
+              <div class="bg-green-50 rounded-lg p-4 sm:p-5">
+                <h4 class="font-semibold text-green-800 mb-2">🎯 Contoh Penerapan:</h4>
+                <ul class="space-y-1.5 text-green-700 text-[0.95rem]">
+                  <li class="flex gap-2"><span class="text-green-500">•</span><span>Gali kebutuhan pihak lain saat negosiasi.</span></li>
+                  <li class="flex gap-2"><span class="text-green-500">•</span><span>Berbagi kredit dengan tim.</span></li>
+                  <li class="flex gap-2"><span class="text-green-500">•</span><span>Hindari kompetisi tidak sehat.</span></li>
+                  <li class="flex gap-2"><span class="text-green-500">•</span><span>Win-Win or No Deal bila perlu.</span></li>
+                </ul>
+              </div>
+            </div>
+
+            <div>
+              <div class="bg-gray-50 rounded-lg p-4 sm:p-5">
+                <h4 class="font-semibold text-gray-800 mb-3">6 Paradigma Interaksi</h4>
+                <div class="space-y-2.5">
+                  <div class="p-3 bg-green-100 rounded-lg border-2 border-green-400">
+                    <div class="font-bold text-green-800">Win-Win</div>
+                    <div class="text-xs sm:text-sm text-green-700">Semua pihak diuntungkan</div>
+                  </div>
+                  <div class="p-3 bg-red-100 rounded-lg">
+                    <div class="font-bold text-red-800">Win-Lose</div>
+                    <div class="text-xs sm:text-sm text-red-700">Saya menang, kamu kalah</div>
+                  </div>
+                  <div class="p-3 bg-yellow-100 rounded-lg">
+                    <div class="font-bold text-yellow-800">Lose-Win</div>
+                    <div class="text-xs sm:text-sm text-yellow-700">Terlalu mengalah</div>
+                  </div>
+                  <div class="p-3 bg-gray-100 rounded-lg">
+                    <div class="font-bold text-gray-800">Lose-Lose</div>
+                    <div class="text-xs sm:text-sm text-gray-700">Semua rugi</div>
+                  </div>
+                  <div class="p-3 bg-purple-100 rounded-lg">
+                    <div class="font-bold text-purple-800">Win</div>
+                    <div class="text-xs sm:text-sm text-purple-700">Fokus menang sendiri</div>
+                  </div>
+                  <div class="p-3 bg-blue-100 rounded-lg">
+                    <div class="font-bold text-blue-800">Win-Win or No Deal</div>
+                    <div class="text-xs sm:text-sm text-blue-700">Tak ada kesepakatan jika tak Win-Win</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-between">
+          <button onclick="prevPage()" class="nav-btn bg-gray-600 text-white px-4 py-2.5 md:px-6 md:py-3 rounded-full text-sm">
+            ← Habit 3
+          </button>
+          <button onclick="nextPage()" class="nav-btn bg-gradient-to-r from-green-500 to-blue-500 text-white px-4 py-2.5 md:px-6 md:py-3 rounded-full text-sm">
+            Habit 5 →
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Habit 5 -->
+  <div class="page" id="page-5">
+    <div class="min-h-screen p-4 py-14 sm:py-16 md:py-20">
+      <div class="max-w-3xl lg:max-w-4xl mx-auto">
+        <div class="text-center mb-6 sm:mb-8">
+          <div class="w-16 h-16 sm:w-20 sm:h-20 bg-blue-500 rounded-full mx-auto mb-3 flex items-center justify-center text-white text-2xl sm:text-3xl font-bold">5</div>
+        <div class="bg-blue-100 rounded-lg p-2.5 sm:p-3 mb-4 inline-block">
+            <span class="text-blue-800 font-semibold text-[0.85rem] sm:text-sm">🤝 Public Victory - Interdependensi</span>
+          </div>
+          <h1 class="h1-fluid text-gray-800 mb-1.5">Seek First to Understand</h1>
+          <h2 class="h2-fluid text-gray-600">Then to be Understood</h2>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 sm:p-6 md:p-8 card-shadow mb-5 sm:mb-6">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+            <div>
+              <h3 class="text-lg md:text-xl font-bold text-gray-800 mb-3">Konsep Utama</h3>
+              <p class="text-gray-700 leading-relaxed mb-5 text-[0.98rem]">
+                Dengarkan dengan empati sebelum berusaha dipahami. Kepercayaan lahir dari pemahaman.
+              </p>
+
+              <div class="bg-blue-50 rounded-lg p-4 sm:p-5">
+                <h4 class="font-semibold text-blue-800 mb-2">🎯 Contoh Penerapan:</h4>
+                <ul class="space-y-1.5 text-blue-700 text-[0.95rem]">
+                  <li class="flex gap-2"><span class="text-blue-500">•</span><span>Mendengar aktif tanpa menyela.</span></li>
+                  <li class="flex gap-2"><span class="text-blue-500">•</span><span>Parafrase ulang inti ucapan lawan bicara.</span></li>
+                  <li class="flex gap-2"><span class="text-blue-500">•</span><span>Tanyakan perasaan di balik fakta.</span></li>
+                  <li class="flex gap-2"><span class="text-blue-500">•</span><span>Validasi emosi sebelum memberi solusi.</span></li>
+                </ul>
+              </div>
+            </div>
+
+            <div>
+              <div class="bg-gray-50 rounded-lg p-4 sm:p-5 mb-5">
+                <h4 class="font-semibold text-gray-800 mb-3">5 Level Mendengar</h4>
+                <div class="space-y-2.5">
+                  <div class="flex items-center gap-3 p-3 bg-red-100 rounded-lg">
+                    <div class="w-7 h-7 sm:w-8 sm:h-8 bg-red-500 rounded-full flex items-center justify-center text-white font-bold text-xs sm:text-sm">1</div>
+                    <span class="text-red-700 text-[0.95rem]">Mengabaikan</span>
+                  </div>
+                  <div class="flex items-center gap-3 p-3 bg-orange-100 rounded-lg">
+                    <div class="w-7 h-7 sm:w-8 sm:h-8 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold text-xs sm:text-sm">2</div>
+                    <span class="text-orange-700 text-[0.95rem]">Pura-pura mendengar</span>
+                  </div>
+                  <div class="flex items-center gap-3 p-3 bg-yellow-100 rounded-lg">
+                    <div class="w-7 h-7 sm:w-8 sm:h-8 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold text-xs sm:text-sm">3</div>
+                    <span class="text-yellow-700 text-[0.95rem]">Selektif</span>
+                  </div>
+                  <div class="flex items-center gap-3 p-3 bg-green-100 rounded-lg">
+                    <div class="w-7 h-7 sm:w-8 sm:h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-xs sm:text-sm">4</div>
+                    <span class="text-green-700 text-[0.95rem]">Atentif</span>
+                  </div>
+                  <div class="flex items-center gap-3 p-3 bg-blue-100 rounded-lg border-2 border-blue-400">
+                    <div class="w-7 h-7 sm:w-8 sm:h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-xs sm:text-sm">5</div>
+                    <span class="text-blue-700 font-semibold text-[0.95rem]">Empatik</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-purple-50 border-l-4 border-purple-400 p-3.5 sm:p-4 rounded-r-lg">
+                <h4 class="font-semibold text-purple-800 mb-1.5">💡 Empathic Listening</h4>
+                <p class="text-purple-700 text-[0.9rem]">
+                  Dengarkan dengan mata (bahasa tubuh), telinga (kata), dan hati (perasaan).
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-between">
+          <button onclick="prevPage()" class="nav-btn bg-gray-600 text-white px-4 py-2.5 md:px-6 md:py-3 rounded-full text-sm">
+            ← Habit 4
+          </button>
+          <button onclick="nextPage()" class="nav-btn bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2.5 md:px-6 md:py-3 rounded-full text-sm">
+            Habit 6 →
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Habit 6 -->
+  <div class="page" id="page-6">
+    <div class="min-h-screen p-4 py-14 sm:py-16 md:py-20">
+      <div class="max-w-3xl lg:max-w-4xl mx-auto">
+        <div class="text-center mb-6 sm:mb-8">
+          <div class="w-16 h-16 sm:w-20 sm:h-20 bg-purple-500 rounded-full mx-auto mb-3 flex items-center justify-center text-white text-2xl sm:text-3xl font-bold">6</div>
+          <div class="bg-blue-100 rounded-lg p-2.5 sm:p-3 mb-4 inline-block">
+            <span class="text-blue-800 font-semibold text-[0.85rem] sm:text-sm">🤝 Public Victory - Interdependensi</span>
+          </div>
+          <h1 class="h1-fluid text-gray-800 mb-1.5">Synergize</h1>
+          <h2 class="h2-fluid text-gray-600">Bersinergi</h2>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 sm:p-6 md:p-8 card-shadow mb-5 sm:mb-6">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+            <div>
+              <h3 class="text-lg md:text-xl font-bold text-gray-800 mb-3">Konsep Utama</h3>
+              <p class="text-gray-700 leading-relaxed mb-5 text-[0.98rem]">
+                Kolaborasi kreatif yang melahirkan alternatif ketiga—lebih baik dari ide awal masing-masing.
+              </p>
+
+              <div class="bg-purple-50 rounded-lg p-4 sm:p-5">
+                <h4 class="font-semibold text-purple-800 mb-2">🎯 Contoh Penerapan:</h4>
+                <ul class="space-y-1.5 text-purple-700 text-[0.95rem]">
+                  <li class="flex gap-2"><span class="text-purple-500">•</span><span>Brainstorm tanpa menghakimi.</span></li>
+                  <li class="flex gap-2"><span class="text-purple-500">•</span><span>Gabungkan kekuatan/keahlian berbeda.</span></li>
+                  <li class="flex gap-2"><span class="text-purple-500">•</span><span>Anggap perbedaan sebagai aset.</span></li>
+                  <li class="flex gap-2"><span class="text-purple-500">•</span><span>Cari solusi kreatif yang “baru”.</span></li>
+                </ul>
+              </div>
+            </div>
+
+            <div>
+              <div class="bg-gray-50 rounded-lg p-4 sm:p-5 mb-5">
+                <h4 class="font-semibold text-gray-800 mb-3">Formula Sinergi</h4>
+                <div class="text-center">
+                  <div class="text-4xl sm:text-5xl font-bold text-purple-600 mb-3">1 + 1 = 3+</div>
+                  <p class="text-gray-700 mb-3 text-[0.95rem]">Hasil sinergi > jumlah bagian.</p>
+                  <div class="grid grid-cols-3 gap-2.5 sm:gap-3 text-xs sm:text-sm">
+                    <div class="bg-red-100 p-2.5 rounded-lg">
+                      <div class="font-bold text-red-800">Ide A</div>
+                      <div class="text-red-600">Perspektif 1</div>
+                    </div>
+                    <div class="bg-blue-100 p-2.5 rounded-lg">
+                      <div class="font-bold text-blue-800">Ide B</div>
+                      <div class="text-blue-600">Perspektif 2</div>
+                    </div>
+                    <div class="bg-purple-100 p-2.5 rounded-lg border-2 border-purple-400">
+                      <div class="font-bold text-purple-800">Ide C</div>
+                      <div class="text-purple-600">Solusi Sinergis</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-green-50 border-l-4 border-green-400 p-3.5 sm:p-4 rounded-r-lg">
+                <h4 class="font-semibold text-green-800 mb-1.5">🌟 Kunci Sinergi</h4>
+                <p class="text-green-700 text-[0.9rem]"><strong>Menghargai perbedaan:</strong> kekuatan, bukan kelemahan.</p>
+                <p class="text-green-700 text-[0.9rem]"><strong>Komunikasi terbuka:</strong> aman berbagi ide.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-between">
+          <button onclick="prevPage()" class="nav-btn bg-gray-600 text-white px-4 py-2.5 md:px-6 md:py-3 rounded-full text-sm">
+            ← Habit 5
+          </button>
+          <button onclick="nextPage()" class="nav-btn bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-4 py-2.5 md:px-6 md:py-3 rounded-full text-sm">
+            Habit 7 →
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Habit 7 -->
+  <div class="page" id="page-7">
+    <div class="min-h-screen p-4 py-14 sm:py-16 md:py-20">
+      <div class="max-w-3xl lg:max-w-4xl mx-auto">
+        <div class="text-center mb-6 sm:mb-8">
+          <div class="w-16 h-16 sm:w-20 sm:h-20 bg-indigo-500 rounded-full mx-auto mb-3 flex items-center justify-center text-white text-2xl sm:text-3xl font-bold">7</div>
+          <div class="bg-indigo-100 rounded-lg p-2.5 sm:p-3 mb-4 inline-block">
+            <span class="text-indigo-800 font-semibold text-[0.85rem] sm:text-sm">🔄 Renewal - Pembaruan</span>
+          </div>
+          <h1 class="h1-fluid text-gray-800 mb-1.5">Sharpen the Saw</h1>
+          <h2 class="h2-fluid text-gray-600">Mengasah Gergaji</h2>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 sm:p-6 md:p-8 card-shadow mb-5 sm:mb-6">
+          <div class="mb-6">
+            <h3 class="text-lg md:text-xl font-bold text-gray-800 mb-2.5 text-center">Konsep Utama</h3>
+            <p class="text-gray-700 leading-relaxed mb-4 sm:mb-5 text-[0.98rem] text-center max-w-3xl mx-auto">
+              Pembaruan diri berkelanjutan dalam 4 dimensi—fisik, mental, spiritual, sosial-emosional.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+            <div class="bg-red-50 rounded-xl p-5">
+              <div class="text-center mb-3">
+                <div class="text-3xl sm:text-4xl mb-1.5">🏃‍♂️</div>
+                <h4 class="text-lg font-bold text-red-800">Dimensi Fisik</h4>
+              </div>
+              <ul class="space-y-1.5 text-red-700 text-[0.95rem]">
+                <li class="flex gap-2"><span class="text-red-500">•</span><span>Olahraga teratur (kardio, kekuatan, fleksibilitas).</span></li>
+                <li class="flex gap-2"><span class="text-red-500">•</span><span>Nutrisi & hidrasi cukup.</span></li>
+                <li class="flex gap-2"><span class="text-red-500">•</span><span>Tidur berkualitas 7–8 jam.</span></li>
+                <li class="flex gap-2"><span class="text-red-500">•</span><span>Manajemen stres.</span></li>
+              </ul>
+            </div>
+
+            <div class="bg-blue-50 rounded-xl p-5">
+              <div class="text-center mb-3">
+                <div class="text-3xl sm:text-4xl mb-1.5">🧠</div>
+                <h4 class="text-lg font-bold text-blue-800">Dimensi Mental</h4>
+              </div>
+              <ul class="space-y-1.5 text-blue-700 text-[0.95rem]">
+                <li class="flex gap-2"><span class="text-blue-500">•</span><span>Membaca & belajar skill baru.</span></li>
+                <li class="flex gap-2"><span class="text-blue-500">•</span><span>Menulis jurnal & refleksi.</span></li>
+                <li class="flex gap-2"><span class="text-blue-500">•</span><span>Latihan problem solving.</span></li>
+                <li class="flex gap-2"><span class="text-blue-500">•</span><span>Stimulasi kreatif.</span></li>
+              </ul>
+            </div>
+
+            <div class="bg-green-50 rounded-xl p-5">
+              <div class="text-center mb-3">
+                <div class="text-3xl sm:text-4xl mb-1.5">🙏</div>
+                <h4 class="text-lg font-bold text-green-800">Dimensi Spiritual</h4>
+              </div>
+              <ul class="space-y-1.5 text-green-700 text-[0.95rem]">
+                <li class="flex gap-2"><span class="text-green-500">•</span><span>Doa/meditasi.</span></li>
+                <li class="flex gap-2"><span class="text-green-500">•</span><span>Refleksi nilai & tujuan.</span></li>
+                <li class="flex gap-2"><span class="text-green-500">•</span><span>Koneksi dengan alam.</span></li>
+                <li class="flex gap-2"><span class="text-green-500">•</span><span>Pelayanan & kontribusi.</span></li>
+              </ul>
+            </div>
+
+            <div class="bg-yellow-50 rounded-xl p-5">
+              <div class="text-center mb-3">
+                <div class="text-3xl sm:text-4xl mb-1.5">❤️</div>
+                <h4 class="text-lg font-bold text-yellow-800">Dimensi Sosial-Emosional</h4>
+              </div>
+              <ul class="space-y-1.5 text-yellow-700 text-[0.95rem]">
+                <li class="flex gap-2"><span class="text-yellow-500">•</span><span>Bangun & rawat relasi.</span></li>
+                <li class="flex gap-2"><span class="text-yellow-500">•</span><span>Empati & mendengar aktif.</span></li>
+                <li class="flex gap-2"><span class="text-yellow-500">•</span><span>Komunikasi & resolusi konflik.</span></li>
+                <li class="flex gap-2"><span class="text-yellow-500">•</span><span>Self-awareness & regulasi emosi.</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="mt-6 sm:mt-8 bg-indigo-50 border-l-4 border-indigo-400 p-4 sm:p-5 rounded-r-lg">
+            <h4 class="font-semibold text-indigo-800 mb-1.5">🔄 Siklus Pembaruan</h4>
+            <p class="text-indigo-700 text-[0.95rem]">
+              Keempat dimensi saling memperkuat. Mengabaikan satu akan mempengaruhi yang lain.
+            </p>
+          </div>
+        </div>
+
+        <div class="flex justify-between">
+          <button onclick="prevPage()" class="nav-btn bg-gray-600 text-white px-4 py-2.5 md:px-6 md:py-3 rounded-full text-sm">
+            ← Habit 6
+          </button>
+          <button onclick="nextPage()" class="nav-btn bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-4 py-2.5 md:px-6 md:py-3 rounded-full text-sm">
+            Kesimpulan →
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page 9: Kesimpulan & Progress -->
+  <div class="page" id="page-8">
+    <div class="min-h-screen p-4 py-14 sm:py-16 md:py-20">
+      <div class="max-w-3xl lg:max-w-4xl mx-auto">
+        <div class="text-center mb-6 sm:mb-8">
+          <div class="floating mb-4 sm:mb-6">
+            <div class="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full mx-auto mb-3 flex items-center justify-center">
+              <span class="text-white text-3xl sm:text-4xl">🎯</span>
+            </div>
+          </div>
+          <h1 class="h1-fluid text-gray-800 mb-1.5">Perjalanan Anda Dimulai</h1>
+          <p class="lead text-gray-600 mb-5 sm:mb-7">Pantau progres dan terapkan 7 kebiasaan tiap hari</p>
+        </div>
+
+        <!-- Progress Tracker -->
+        <div class="bg-white rounded-2xl p-5 sm:p-6 md:p-8 card-shadow mb-6 sm:mb-8">
+          <h2 class="h2-fluid text-gray-800 mb-5 sm:mb-6 text-center">📊 Progress Tracker</h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 mb-6">
+            <!-- Habit progress items (1..7) -->
+            <!-- Komponen dipersingkat: class dot-btn untuk ukuran tombol -->
+            <!-- 1 -->
+            <div class="habit-progress" data-habit="1">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-[0.9rem] sm:text-sm font-medium text-gray-700">Habit 1: Be Proactive</span>
+                <span class="habit-percentage text-[0.85rem] sm:text-sm text-gray-500">0%</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div class="habit-bar bg-red-500 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+              </div>
+              <div class="flex justify-center mt-2.5 gap-2">
+                <button class="progress-btn dot-btn rounded-full border-2 border-red-300 text-red-500 text-sm hover:bg-red-500 hover:text-white" data-level="1">1</button>
+                <button class="progress-btn dot-btn rounded-full border-2 border-red-300 text-red-500 text-sm hover:bg-red-500 hover:text-white" data-level="2">2</button>
+                <button class="progress-btn dot-btn rounded-full border-2 border-red-300 text-red-500 text-sm hover:bg-red-500 hover:text-white" data-level="3">3</button>
+                <button class="progress-btn dot-btn rounded-full border-2 border-red-300 text-red-500 text-sm hover:bg-red-500 hover:text-white" data-level="4">4</button>
+                <button class="progress-btn dot-btn rounded-full border-2 border-red-300 text-red-500 text-sm hover:bg-red-500 hover:text-white" data-level="5">5</button>
+              </div>
+            </div>
+
+            <!-- 2 -->
+            <div class="habit-progress" data-habit="2">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-[0.9rem] sm:text-sm font-medium text-gray-700">Habit 2: Begin with End in Mind</span>
+                <span class="habit-percentage text-[0.85rem] sm:text-sm text-gray-500">0%</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div class="habit-bar bg-orange-500 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+              </div>
+              <div class="flex justify-center mt-2.5 gap-2">
+                <button class="progress-btn dot-btn rounded-full border-2 border-orange-300 text-orange-500 text-sm hover:bg-orange-500 hover:text-white" data-level="1">1</button>
+                <button class="progress-btn dot-btn rounded-full border-2 border-orange-300 text-orange-500 text-sm hover:bg-orange-500 hover:text-white" data-level="2">2</button>
+                <button class="progress-btn dot-btn rounded-full border-2 border-orange-300 text-orange-500 text-sm hover:bg-orange-500 hover:text-white" data-level="3">3</button>
+                <button class="progress-btn dot-btn rounded-full border-2 border-orange-300 text-orange-500 text-sm hover:bg-orange-500 hover:text-white" data-level="4">4</button>
+                <button class="progress-btn dot-btn rounded-full border-2 border-orange-300 text-orange-500 text-sm hover:bg-orange-500 hover:text-white" data-level="5">5</button>
+              </div>
+            </div>
+
+            <!-- 3 -->
+            <div class="habit-progress" data-habit="3">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-[0.9rem] sm:text-sm font-medium text-gray-700">Habit 3: Put First Things First</span>
+                <span class="habit-percentage text-[0.85rem] sm:text-sm text-gray-500">0%</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div class="habit-bar bg-yellow-500 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+              </div>
+              <div class="flex justify-center mt-2.5 gap-2">
+                <button class="progress-btn dot-btn rounded-full border-2 border-yellow-300 text-yellow-600 text-sm hover:bg-yellow-500 hover:text-white" data-level="1">1</button>
+                <button class="progress-btn dot-btn rounded-full border-2 border-yellow-300 text-yellow-600 text-sm hover:bg-yellow-500 hover:text-white" data-level="2">2</button>
+                <button class="progress-btn dot-btn rounded-full border-2 border-yellow-300 text-yellow-600 text-sm hover:bg-yellow-500 hover:text-white" data-level="3">3</button>
+                <button class="progress-btn dot-btn rounded-full border-2 border-yellow-300 text-yellow-600 text-sm hover:bg-yellow-500 hover:text-white" data-level="4">4</button>
+                <button class="progress-btn dot-btn rounded-full border-2 border-yellow-300 text-yellow-600 text-sm hover:bg-yellow-500 hover:text-white" data-level="5">5</button>
+              </div>
+            </div>
+
+            <!-- 4 -->
+            <div class="habit-progress" data-habit="4">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-[0.9rem] sm:text-sm font-medium text-gray-700">Habit 4: Think Win-Win</span>
+                <span class="habit-percentage text-[0.85rem] sm:text-sm text-gray-500">0%</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div class="habit-bar bg-green-500 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+              </div>
+              <div class="flex justify-center mt-2.5 gap-2">
+                <button class="progress-btn dot-btn rounded-full border-2 border-green-300 text-green-500 text-sm hover:bg-green-500 hover:text-white" data-level="1">1</button>
+                <button class="progress-btn dot-btn rounded-full border-2 border-green-300 text-green-500 text-sm hover:bg-green-500 hover:text-white" data-level="2">2</button>
+                <button class="progress-btn dot-btn rounded-full border-2 border-green-300 text-green-500 text-sm hover:bg-green-500 hover:text-white" data-level="3">3</button>
+                <button class="progress-btn dot-btn rounded-full border-2 border-green-300 text-green-500 text-sm hover:bg-green-500 hover:text-white" data-level="4">4</button>
+                <button class="progress-btn dot-btn rounded-full border-2 border-green-300 text-green-500 text-sm hover:bg-green-500 hover:text-white" data-level="5">5</button>
+              </div>
+            </div>
+
+            <!-- 5 -->
+            <div class="habit-progress" data-habit="5">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-[0.9rem] sm:text-sm font-medium text-gray-700">Habit 5: Seek First to Understand</span>
+                <span class="habit-percentage text-[0.85rem] sm:text-sm text-gray-500">0%</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div class="habit-bar bg-blue-500 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+              </div>
+              <div class="flex justify-center mt-2.5 gap-2">
+                <button class="progress-btn dot-btn rounded-full border-2 border-blue-300 text-blue-500 text-sm hover:bg-blue-500 hover:text-white" data-level="1">1</button>
+                <button class="progress-btn dot-btn rounded-full border-2 border-blue-300 text-blue-500 text-sm hover:bg-blue-500 hover:text-white" data-level="2">2</button>
+                <button class="progress-btn dot-btn rounded-full border-2 border-blue-300 text-blue-500 text-sm hover:bg-blue-500 hover:text-white" data-level="3">3</button>
+                <button class="progress-btn dot-btn rounded-full border-2 border-blue-300 text-blue-500 text-sm hover:bg-blue-500 hover:text-white" data-level="4">4</button>
+                <button class="progress-btn dot-btn rounded-full border-2 border-blue-300 text-blue-500 text-sm hover:bg-blue-500 hover:text-white" data-level="5">5</button>
+              </div>
+            </div>
+
+            <!-- 6 -->
+            <div class="habit-progress" data-habit="6">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-[0.9rem] sm:text-sm font-medium text-gray-700">Habit 6: Synergize</span>
+                <span class="habit-percentage text-[0.85rem] sm:text-sm text-gray-500">0%</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div class="habit-bar bg-purple-500 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+              </div>
+              <div class="flex justify-center mt-2.5 gap-2">
+                <button class="progress-btn dot-btn rounded-full border-2 border-purple-300 text-purple-500 text-sm hover:bg-purple-500 hover:text-white" data-level="1">1</button>
+                <button class="progress-btn dot-btn rounded-full border-2 border-purple-300 text-purple-500 text-sm hover:bg-purple-500 hover:text-white" data-level="2">2</button>
+                <button class="progress-btn dot-btn rounded-full border-2 border-purple-300 text-purple-500 text-sm hover:bg-purple-500 hover:text-white" data-level="3">3</button>
+                <button class="progress-btn dot-btn rounded-full border-2 border-purple-300 text-purple-500 text-sm hover:bg-purple-500 hover:text-white" data-level="4">4</button>
+                <button class="progress-btn dot-btn rounded-full border-2 border-purple-300 text-purple-500 text-sm hover:bg-purple-500 hover:text-white" data-level="5">5</button>
+              </div>
+            </div>
+
+            <!-- 7 -->
+            <div class="habit-progress" data-habit="7">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-[0.9rem] sm:text-sm font-medium text-gray-700">Habit 7: Sharpen the Saw</span>
+                <span class="habit-percentage text-[0.85rem] sm:text-sm text-gray-500">0%</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div class="habit-bar bg-indigo-500 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+              </div>
+              <div class="flex justify-center mt-2.5 gap-2">
+                <button class="progress-btn dot-btn rounded-full border-2 border-indigo-300 text-indigo-500 text-sm hover:bg-indigo-500 hover:text-white" data-level="1">1</button>
+                <button class="progress-btn dot-btn rounded-full border-2 border-indigo-300 text-indigo-500 text-sm hover:bg-indigo-500 hover:text-white" data-level="2">2</button>
+                <button class="progress-btn dot-btn rounded-full border-2 border-indigo-300 text-indigo-500 text-sm hover:bg-indigo-500 hover:text-white" data-level="3">3</button>
+                <button class="progress-btn dot-btn rounded-full border-2 border-indigo-300 text-indigo-500 text-sm hover:bg-indigo-500 hover:text-white" data-level="4">4</button>
+                <button class="progress-btn dot-btn rounded-full border-2 border-indigo-300 text-indigo-500 text-sm hover:bg-indigo-500 hover:text-white" data-level="5">5</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center">
+            <div class="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-5">
+              <h4 class="font-semibold text-gray-800 mb-1.5">Overall Progress</h4>
+              <div class="text-3xl sm:text-4xl font-bold text-purple-600 mb-1" id="overallProgress">0%</div>
+              <p class="text-xs sm:text-sm text-gray-600">Klik 1–5 untuk menilai penguasaan tiap kebiasaan</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quotes -->
+        <div class="bg-white rounded-2xl p-5 sm:p-6 card-shadow mb-6">
+          <h2 class="h2-fluid text-gray-800 mb-4 sm:mb-5 text-center">💭 Kutipan Inspiratif</h2>
+          <div class="space-y-3 sm:space-y-4">
+            <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4 sm:p-5 border-l-4 border-purple-500">
+              <p class="text-gray-700 italic mb-2 text-[0.98rem]">"Sow a thought, reap an action; sow an action, reap a habit; sow a habit, reap a character; sow a character, reap a destiny."</p>
+              <p class="text-xs sm:text-sm text-purple-600 font-semibold">- Stephen R. Covey</p>
+            </div>
+            <div class="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-4 sm:p-5 border-l-4 border-blue-500">
+              <p class="text-gray-700 italic mb-2 text-[0.98rem]">"The key is not to prioritize what's on your schedule, but to schedule your priorities."</p>
+              <p class="text-xs sm:text-sm text-blue-600 font-semibold">- Stephen R. Covey</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-between">
+          <button onclick="prevPage()" class="nav-btn bg-gray-600 text-white px-4 py-2.5 md:px-6 md:py-3 rounded-full text-sm">
+            ← Habit 7
+          </button>
+          <button onclick="goToPage(0)" class="nav-btn bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-2.5 md:px-6 md:py-3 rounded-full text-sm">
+            🏠 Kembali ke Awal
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentPage = 0;
+    const totalPages = 9;
+
+    function updateProgressBar() {
+      const progress = ((currentPage + 1) / totalPages) * 100;
+      document.getElementById('progressBar').style.width = `${progress}%`;
+      document.getElementById('pageIndicator').textContent = `${currentPage + 1} / ${totalPages}`;
+    }
+
+    function showPage(pageIndex) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      setTimeout(() => { document.getElementById(`page-${pageIndex}`).classList.add('active'); }, 20);
+      currentPage = pageIndex;
+      updateProgressBar();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function nextPage() { if (currentPage < totalPages - 1) showPage(currentPage + 1); }
+    function prevPage() { if (currentPage > 0) showPage(currentPage - 1); }
+    function goToPage(i) { if (i >= 0 && i < totalPages) showPage(i); }
+
+    const progressButtons = document.querySelectorAll('.progress-btn');
+    const habitProgresses = document.querySelectorAll('.habit-progress');
+
+    function loadProgress() {
+      habitProgresses.forEach(h => {
+        const n = h.dataset.habit;
+        const saved = localStorage.getItem(`habit-${n}`) || 0;
+        updateHabitProgress(h, parseInt(saved, 10));
+      });
+      updateOverallProgress();
+    }
+
+    function updateHabitProgress(habitDiv, level) {
+      const n = habitDiv.dataset.habit;
+      const bar = habitDiv.querySelector('.habit-bar');
+      const pct = habitDiv.querySelector('.habit-percentage');
+      const btns = habitDiv.querySelectorAll('.progress-btn');
+
+      const percent = Math.round((level / 5) * 100);
+      bar.style.width = `${percent}%`;
+      pct.textContent = `${percent}%`;
+
+      btns.forEach((btn, idx) => {
+        const active = idx < level;
+        btn.style.backgroundColor = active ? getComputedStyle(bar).backgroundColor : 'transparent';
+        btn.style.color = active ? '#fff' : '';
+        btn.style.borderColor = active ? getComputedStyle(bar).backgroundColor : '';
+      });
+
+      localStorage.setItem(`habit-${n}`, level);
+    }
+
+    function updateOverallProgress() {
+      let total = 0;
+      habitProgresses.forEach(h => total += parseInt(localStorage.getItem(`habit-${h.dataset.habit}`) || 0, 10));
+      const overall = Math.round((total / 35) * 100);
+      const el = document.getElementById('overallProgress');
+      if (el) el.textContent = `${overall}%`;
+    }
+
+    progressButtons.forEach(b => {
+      b.addEventListener('click', e => {
+        e.preventDefault();
+        const level = parseInt(b.dataset.level, 10);
+        const container = b.closest('.habit-progress');
+        updateHabitProgress(container, level);
+        updateOverallProgress();
+        b.style.transform = 'scale(0.96)';
+        setTimeout(() => (b.style.transform = 'scale(1)'), 120);
+      }, { passive: true });
+    });
+
+    // Keyboard
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextPage(); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); prevPage(); }
+      else if (e.key === 'Home') { e.preventDefault(); goToPage(0); }
+      else if (e.key === 'End') { e.preventDefault(); goToPage(totalPages - 1); }
+    });
+
+    // Swipe
+    let touchStartX = 0, touchEndX = 0;
+    document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+    document.addEventListener('touchend', e => { touchEndX = e.changedTouches[0].screenX; handleSwipe(); }, { passive: true });
+    function handleSwipe() {
+      const diff = touchStartX - touchEndX;
+      const threshold = 45;
+      if (Math.abs(diff) > threshold) diff > 0 ? nextPage() : prevPage();
+    }
+
+    updateProgressBar();
+    loadProgress();
+  </script>
+</body>
 </html>
